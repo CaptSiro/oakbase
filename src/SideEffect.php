@@ -5,11 +5,15 @@
   class SideEffect {
     private int $last_inserted_ID, $row_count;
     
+    
+    
     public function __construct (int $liID, int $rc) {
       $this->last_inserted_ID = $liID;
       $this->row_count = $rc;
     }
   
+    
+    
     /**
      * @return int
      */
@@ -17,6 +21,8 @@
       return $this->last_inserted_ID;
     }
   
+    
+    
     /**
      * @return int
      */

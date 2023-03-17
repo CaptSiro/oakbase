@@ -5,8 +5,9 @@
   use Database\PrimitiveParam;
   
   require_once __DIR__ . "/../src/Database.php";
-  require_once __DIR__ . "/../src/BasicConfig.php";
-  require_once __DIR__ . "/../src/PrimitiveParam.php";
+  require_once __DIR__ . "/../src/config/BasicConfig.php";
+  require_once __DIR__ . "/../src/param-logic/PrimitiveParam.php";
+  require_once __DIR__ . "/../src/param-logic/NamedPrimitiveParam.php";
   
   Database::configure(new BasicConfig(
     "localhost",
