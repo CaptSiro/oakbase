@@ -1,15 +1,15 @@
 <?php
   
   namespace Database;
+  
   use PDO;
+  use PDOStatement;
   use stdClass;
 
-
-  require_once __DIR__ . "/ParamBuffer.php";
-  require_once __DIR__ . "/CreationException.php";
+  require_once __DIR__ . "/param-logic/ParamBuffer.php";
+  require_once __DIR__ . "/exceptions/CreationException.php";
+  require_once __DIR__ . "/exceptions/MixedIndexingException.php";
   require_once __DIR__ . "/SideEffect.php";
-  
-  
   
   class Database {
     private PDO $connection;
@@ -17,6 +17,7 @@
     
     
     private static Config $config;
+    
     public static function configure (Config $config) {
       self::$config = $config;
     }
@@ -24,6 +25,7 @@
   
   
     private static Database $instance;
+    
     public static function get(): Database {
       if (!isset($instance)) {
         self::$instance = new Database();
@@ -62,19 +64,39 @@
   
     
     /**
+     * @param PDOStatement $statement
+     * @throws MixedIndexingException
+     */
+    private static function bind_params (PDOStatement $statement) {
+      $i = 1;
+      $indexationType = "--initial--";
+      
+      while (!ParamBuffer::is_empty()) {
+        $param = ParamBuffer::shift();
+        $name = $param->name() ?? $i++;
+    
+        if ($indexationType !== gettype($name) && $indexationType !== "--initial--") {
+          throw new MixedIndexingException("Cannot use named param logic as well as indexed param logic. Got index: ". $name);
+        }
+    
+        $indexationType = gettype($name);
+  
+        $statement->bindValue($name, $param->value(), $param->type());
+      }
+    }
+  
+  
+    
+    /**
      * Run a query that does not return any rows such as UPDATE, DELETE, INSERT or TRUNCATE.
      *
      * @param $sql
      * @return SideEffect
+     * @throws MixedIndexingException
      */
     public function statement ($sql): SideEffect {
       $stmt = $this->connection->prepare($sql);
-      
-      $i = 1;
-      while (!ParamBuffer::is_empty()) {
-        $param = ParamBuffer::shift();
-        $stmt->bindValue($i++, $param->value(), $param->type());
-      }
+      self::bind_params($stmt);
       
       $stmt->execute();
 
@@ -92,16 +114,11 @@
      * @param string $sql
      * @param string $class
      * @return mixed
+     * @throws MixedIndexingException
      */
     public function fetch (string $sql, string $class = stdClass::class) {
       $stmt = $this->connection->prepare($sql);
-  
-      $i = 1;
-      while (!ParamBuffer::is_empty()) {
-        $param = ParamBuffer::shift();
-        $stmt->bindValue($i++, $param->value(), $param->type());
-      }
-      
+      self::bind_params($stmt);
       $stmt->execute();
       $stmt->setFetchMode(PDO::FETCH_CLASS, $class);
       
@@ -116,16 +133,11 @@
      * @param $sql
      * @param string $class
      * @return array|false
+     * @throws MixedIndexingException
      */
     public function fetch_all ($sql, string $class = stdClass::class) {
       $stmt = $this->connection->prepare($sql);
-  
-      $i = 1;
-      while (!ParamBuffer::is_empty()) {
-        $param = ParamBuffer::shift();
-        $stmt->bindValue($i++, $param->value(), $param->type());
-      }
-      
+      self::bind_params($stmt);
       $stmt->execute();
       $stmt->setFetchMode(PDO::FETCH_CLASS, $class);
       
