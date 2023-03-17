@@ -60,6 +60,28 @@
     public function last_inserted_ID() {
       return $this->connection->lastInsertId();
     }
+    
+    
+    
+    private static function count_params (string $sql): int {
+      $no_string_literals = "";
+  
+      $in_string = false;
+      for ($i = 0; $i < strlen($sql); $i++) {
+        if (in_array($sql[$i], ["'", '"'])) {
+          $in_string = !$in_string;
+          continue;
+        }
+    
+        if ($in_string === true) {
+          continue;
+        }
+    
+        $no_string_literals .= $sql[$i];
+      }
+  
+      return intval(preg_match("/([:?])/", $no_string_literals));
+    }
   
   
     
@@ -68,12 +90,15 @@
      * @throws MixedIndexingException
      */
     private static function bind_params (PDOStatement $statement) {
-      $i = 1;
+      $index = 1;
       $indexationType = "--initial--";
       
-      while (!ParamBuffer::is_empty()) {
+      $iteration = 0;
+      $count = self::count_params($statement->queryString);
+      
+      while ($iteration < $count && !ParamBuffer::is_empty()) {
         $param = ParamBuffer::shift();
-        $name = $param->name() ?? $i++;
+        $name = $param->name() ?? $index++;
     
         if ($indexationType !== gettype($name) && $indexationType !== "--initial--") {
           throw new MixedIndexingException("Cannot use named param logic as well as indexed param logic. Got index: ". $name);
@@ -82,6 +107,7 @@
         $indexationType = gettype($name);
   
         $statement->bindValue($name, $param->value(), $param->type());
+        $iteration++;
       }
     }
   
