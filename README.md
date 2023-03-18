@@ -1,7 +1,7 @@
-# oakbase
-A library for full abstraction of param binding to database query using PDO.
+# OakBase
+A PHP library for full abstraction of param binding to database query using PDO.
 
-But there is a risk of adding objects that does not implement `\Oakbase\Param` interface, thus adding vulnerability
+But there is a risk of adding objects that does not implement `\Oakbase\Param` interface, thus adding vulnerability.
 
 ## Note: That this library is not meant for use in multithreading applications and may result in unexpected behavior
 
