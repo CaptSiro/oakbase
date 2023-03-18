@@ -1,6 +1,6 @@
 <?php
   
-  namespace Database;
+  namespace OakBase;
   
   class SideEffect {
     private int $last_inserted_ID, $row_count;

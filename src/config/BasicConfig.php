@@ -1,6 +1,7 @@
 <?php
   
-  namespace Database;
+  namespace OakBase;
+  
   require_once __DIR__ . "/Config.php";
   
   class BasicConfig implements Config {

@@ -1,6 +1,6 @@
 <?php
   
-  namespace Database;
+  namespace OakBase;
   
   use PDO;
   use PDOStatement;
@@ -14,6 +14,9 @@
   class Database {
     private PDO $connection;
     
+    public function connection () {
+      return $this->connection;
+    }
     
     
     private static Config $config;
@@ -41,7 +44,7 @@
      */
     public function __construct() {
       if (!isset(self::$config)) {
-        throw new CreationException("Must set config object before creating connection to database. Use Database::configure() with custom object that implements Config or use BasicConfig class.");
+        throw new CreationException("Must set config object before creating connection to database. Use Oakbase::configure() with custom object that implements Config or use BasicConfig class.");
       }
       
       $connectionString = "mysql:host=". self::$config->host()

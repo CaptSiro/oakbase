@@ -1,6 +1,6 @@
 <?php
   
-  namespace Database;
+  namespace OakBase;
   use PDO;
 
   const PARAM_TYPE_TABLE = [

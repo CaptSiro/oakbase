@@ -1,8 +1,8 @@
 <?php
   
-  use Database\BasicConfig;
-  use Database\Database;
-  use Database\PrimitiveParam;
+  use OakBase\BasicConfig;
+  use OakBase\Database;
+  use OakBase\PrimitiveParam;
   
   require_once __DIR__ . "/../src/Database.php";
   require_once __DIR__ . "/../src/config/BasicConfig.php";

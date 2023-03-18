@@ -1,18 +1,19 @@
 # oakbase
 A library for full abstraction of param binding to database query using PDO.
 
-But there is a risk of adding objects that does not implement `\Database\Param` interface, thus adding vulnerability
+But there is a risk of adding objects that does not implement `\Oakbase\Param` interface, thus adding vulnerability
 
 ## Note: That this library is not meant for use in multithreading applications and may result in unexpected behavior
 
 ### Configuration of database
 
-Before you can use the database you need to provide configuration details via implementation of `\Database\Config` interface or creation of `\Database\BasicConfig`
+Before you can use the database you need to provide configuration details via implementation of `\Oakbase\Config` interface or creation of `\Oakbase\BasicConfig`
 
-- usage of `\Database\BasicConfig`
+- usage of `\Oakbase\BasicConfig`
+
 ```php
-use Database\Database;
-use Database\BasicConfig;
+use OakBase\Database;
+use OakBase\BasicConfig;
 
 Database::configure(new BasicConfig(
     "localhost",
@@ -56,7 +57,7 @@ For non returning queries use: `statement($sql): SideEffect`
 $title = new PrimitiveParam("insert");
 $content = new PrimitiveParam(NULL);
 $number = new PrimitiveParam(69);
-  
+
 $side_effect = Database::get()->statement("
     INSERT INTO posts (title, content, likes)
     VALUE ($title, $content, $number)

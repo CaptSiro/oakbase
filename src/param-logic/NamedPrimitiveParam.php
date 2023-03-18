@@ -1,6 +1,6 @@
 <?php
   
-  namespace Database;
+  namespace OakBase;
   
   require_once __DIR__ . "/Param.php";
   require_once __DIR__ . "/ParamBuffer.php";
