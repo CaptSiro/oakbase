@@ -3,7 +3,7 @@
   namespace OakBase;
 
   require_once __DIR__ . "/Param.php";
-  require_once __DIR__ . "/ParamBuffer.php";
+  require_once __DIR__ . "/../buffer/ParamBuffer.php";
   
   require_once __DIR__ . "/ParamStringifier.php";
   require_once __DIR__ . "/ParamType.php";

@@ -2,7 +2,7 @@
   
   namespace OakBase;
 
-  require_once __DIR__ . "/ParamBuffer.php";
+  require_once __DIR__ . "/../buffer/ParamBuffer.php";
 
   trait ParamStringifier {
     /**
@@ -14,7 +14,7 @@
         throw new ImplementationException("You must implement the Param interface.");
       }
     
-      ParamBuffer::add($this);
+      ParamBuffer::get()->add($this);
       return "?";
     }
   
@@ -23,5 +23,9 @@
      */
     function name (): ?string {
       return null;
+    }
+  
+    function to_string (): string {
+      return "[". $this->name() ."]: '". $this->value() ."' (". $this->type() .")";
     }
   }

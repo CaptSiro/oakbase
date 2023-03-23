@@ -9,6 +9,11 @@
      * @return string
      */
     function __toString (): string;
+    
+    
+    
+    
+    function to_string (): string;
   
   
     

@@ -6,7 +6,7 @@
   use PDOStatement;
   use stdClass;
 
-  require_once __DIR__ . "/param-logic/ParamBuffer.php";
+  require_once __DIR__ . "/buffer/ParamBuffer.php";
   require_once __DIR__ . "/exceptions/CreationException.php";
   require_once __DIR__ . "/exceptions/MixedIndexingException.php";
   require_once __DIR__ . "/SideEffect.php";
@@ -90,18 +90,47 @@
   
     
     /**
+     * @param string|Query $query
+     * @return Buffer
+     */
+    private static function get_buffer ($query): Buffer {
+      if ($query instanceof Query) {
+        return $query->params();
+      }
+      
+      return ParamBuffer::get();
+    }
+  
+  
+  
+    /**
+     * @param string|Query $query
+     * @return string
+     */
+    private static function get_string ($query): string {
+      if ($query instanceof Query) {
+        return $query->string();
+      }
+    
+      return $query;
+    }
+  
+  
+    /**
      * @param PDOStatement $statement
+     * @param string|Query $query
      * @throws MixedIndexingException
      */
-    private static function bind_params (PDOStatement $statement) {
+    private static function bind_params (PDOStatement $statement, $query) {
       $index = 1;
       $indexationType = "--initial--";
       
       $iteration = 0;
-      $count = self::count_params($statement->queryString);
+      $count = self::count_params(self::get_string($query));
+      $buf = self::get_buffer($query);
       
-      while ($iteration < $count && !ParamBuffer::is_empty()) {
-        $param = ParamBuffer::shift();
+      while ($iteration < $count && !$buf->is_empty()) {
+        $param = $buf->shift();
         $name = $param->name() ?? $index++;
     
         if ($indexationType !== gettype($name) && $indexationType !== "--initial--") {
@@ -120,13 +149,13 @@
     /**
      * Run a query that does not return any rows such as UPDATE, DELETE, INSERT or TRUNCATE.
      *
-     * @param $sql
+     * @param string|Query $query
      * @return SideEffect
      * @throws MixedIndexingException
      */
-    public function statement ($sql): SideEffect {
-      $stmt = $this->connection->prepare($sql);
-      self::bind_params($stmt);
+    public function statement ($query): SideEffect {
+      $stmt = $this->connection->prepare(self::get_string($query));
+      self::bind_params($stmt, $query);
       
       $stmt->execute();
 
@@ -141,14 +170,14 @@
     /**
      * Fetch a single row.
      *
-     * @param string $sql
+     * @param string|Query $query
      * @param string $class
      * @return mixed
      * @throws MixedIndexingException
      */
-    public function fetch (string $sql, string $class = stdClass::class) {
-      $stmt = $this->connection->prepare($sql);
-      self::bind_params($stmt);
+    public function fetch ($query, string $class = stdClass::class) {
+      $stmt = $this->connection->prepare(self::get_string($query));
+      self::bind_params($stmt, $query);
       $stmt->execute();
       $stmt->setFetchMode(PDO::FETCH_CLASS, $class);
       
@@ -160,14 +189,14 @@
     /**
      * Fetch multiple rows.
      *
-     * @param $sql
+     * @param string|Query $query
      * @param string $class
      * @return array|false
      * @throws MixedIndexingException
      */
-    public function fetch_all ($sql, string $class = stdClass::class) {
-      $stmt = $this->connection->prepare($sql);
-      self::bind_params($stmt);
+    public function fetch_all ($query, string $class = stdClass::class) {
+      $stmt = $this->connection->prepare(self::get_string($query));
+      self::bind_params($stmt, $query);
       $stmt->execute();
       $stmt->setFetchMode(PDO::FETCH_CLASS, $class);
       

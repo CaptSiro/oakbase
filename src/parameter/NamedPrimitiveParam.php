@@ -3,7 +3,7 @@
   namespace OakBase;
   
   require_once __DIR__ . "/Param.php";
-  require_once __DIR__ . "/ParamBuffer.php";
+  require_once __DIR__ . "/../buffer/ParamBuffer.php";
   
   require_once __DIR__ . "/ParamType.php";
   
@@ -28,8 +28,12 @@
     
   
     function __toString(): string {
-      ParamBuffer::add($this);
+      ParamBuffer::get()->add($this);
       return $this->name();
+    }
+  
+    function to_string (): string {
+      return "[". $this->name() ."]: '". $this->value() ."' (". $this->type() .")";
     }
   
     function value() {
