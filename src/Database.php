@@ -84,7 +84,7 @@
         $no_string_literals .= $sql[$i];
       }
   
-      return intval(preg_match("/([:?])/", $no_string_literals));
+      return intval(preg_match_all("/([:?])/", $no_string_literals));
     }
   
   
