@@ -39,4 +39,8 @@
      * Return string that was returned by `__toString()` method or null to use indexed based binding (`"?"` was returned)
      */
     function name (): ?string;
+
+
+
+    function name_raw(): ?string;
   }

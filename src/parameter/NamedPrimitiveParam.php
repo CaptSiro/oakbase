@@ -8,7 +8,7 @@
   require_once __DIR__ . "/ParamType.php";
   
   class NamedPrimitiveParam implements Param {
-    private string $name;
+    public string $name;
     private mixed $value;
   
   
@@ -39,6 +39,10 @@
   
     function name(): ?string {
       return ":$this->name";
+    }
+
+    function name_raw(): ?string {
+        return $this->name;
     }
     
     use ParamType;

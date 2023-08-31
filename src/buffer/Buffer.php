@@ -4,10 +4,22 @@
   
   interface Buffer {
     function add ($value);
+
+
+
+    function set (string|int $key, Param $value): void;
+
+
+
+    function exists (string|int $key): bool;
     
     
     
-    function shift ();
+    function shift (): Param|null;
+
+
+
+    function rewind (): void;
     
     
     

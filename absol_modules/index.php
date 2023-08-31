@@ -5,3 +5,4 @@ require_once __DIR__ . "/../src/config/BasicConfig.php";
 require_once __DIR__ . "/../src/query/Query.php";
 require_once __DIR__ . "/../src/parameter/PrimitiveParam.php";
 require_once __DIR__ . "/../src/param.php";
+require_once __DIR__ . "/../src/named-param.php";

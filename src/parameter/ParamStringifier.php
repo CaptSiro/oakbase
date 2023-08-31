@@ -24,7 +24,11 @@
     function name (): ?string {
       return null;
     }
-  
+
+    function name_raw (): ?string {
+        return null;
+    }
+
     function to_string (): string {
       return "[". $this->name() ."]: '". $this->value() ."' (". $this->type() .")";
     }

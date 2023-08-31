@@ -25,9 +25,9 @@
     /**
      * Returns first Param item in buffer and null if buffer is empty
      *
-     * @return Param
+     * @return Param|null
      */
-    public function shift (): Param {
+    public function shift (): Param|null {
       return array_shift($this->buffer);
     }
   
@@ -49,5 +49,25 @@
   
     function load ($values): void {
       $this->buffer = $values;
+    }
+
+
+
+    function rewind (): void {}
+
+
+
+    function set (string|int $key, Param $value): void {
+        foreach ($this->buffer as $k => $param) {
+            if ($param->name_raw() === $key) {
+                $this->buffer[$k] = $value;
+            }
+        }
+    }
+
+
+
+    function exists (string|int $key): bool {
+        return isset($this->buffer[$key]);
     }
   }

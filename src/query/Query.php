@@ -30,4 +30,22 @@
     public static function build (): QueryBuilder {
       return new QueryBuilder();
     }
+
+
+
+    /**
+     * To be able to use this function you need to use ***named params*** in query
+     *
+     * @param NamedPrimitiveParam $param
+     * @return bool Returns false if the param's name is not present in query
+     */
+    function set (NamedPrimitiveParam $param): bool {
+      if ($this->params->exists($param->name())) {
+          return false;
+      }
+
+      $this->params->set($param->name, $param);
+
+      return true;
+    }
   }

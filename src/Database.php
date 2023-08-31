@@ -119,6 +119,8 @@ class Database {
             $iteration++;
         }
 
+        $buf->rewind();
+
         return success($statement);
     }
 
