@@ -9,10 +9,7 @@
   
   class NamedPrimitiveParam implements Param {
     private string $name;
-    /**
-     * @var mixed $value
-     */
-    private $value;
+    private mixed $value;
   
   
     

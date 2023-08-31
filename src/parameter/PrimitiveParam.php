@@ -9,10 +9,7 @@
   require_once __DIR__ . "/ParamType.php";
   
   class PrimitiveParam implements Param {
-    /**
-     * @var mixed $value
-     */
-    private $value;
+    private mixed $value;
   
   
     
@@ -21,7 +18,7 @@
      *
      * @param mixed $value
      */
-    public function __construct ($value) {
+    public function __construct (mixed $value) {
       $this->value = $value;
     }
   

@@ -1,0 +1,7 @@
+{
+    "name": "oakbase",
+    "version": "2.0.0",
+    "dependencies": [
+        "https:\/\/github.com\/CaptSiro\/retval.git"
+    ]
+}

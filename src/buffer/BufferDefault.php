@@ -16,7 +16,7 @@
      * @param Param $value
      * @return void
      */
-    public function add ($value) {
+    public function add ($value): void {
       $this->buffer[] = $value;
     }
   
@@ -47,7 +47,7 @@
   
   
   
-    function load ($values) {
+    function load ($values): void {
       $this->buffer = $values;
     }
   }
